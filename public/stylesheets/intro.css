@@ -1,0 +1,272 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Header */
+  header {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 400px; /* Adjust height as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slideshow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 400%;
+    height: 100%;
+    display: flex;
+    animation: slideImages 60s linear infinite;
+  }
+
+  .slideshow img {
+    width: 25%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  @keyframes slideImages {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .logo {
+    position: relative;
+    top: 20px;
+    left: 10px;
+    z-index: 1;
+  }
+
+  .logo img {
+    width: 400px; /* Adjust the width of the logo */
+    height: auto;
+    filter: brightness(
+      150%
+    ); /* Increase brightness for better visibility */
+  }
+
+  .motto {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    color: #ffa500; /* Adjust color for better visibility */
+    font-size: 24px; /* Increase font size for better visibility */
+  }
+
+  /* Navigation */
+  nav {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #333;
+  }
+
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+  }
+
+  nav a:hover {
+    background-color: #555;
+  }
+
+  /* Main Content */
+  .main-content {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .main-content .left-column {
+    flex: 1;
+    max-width: 50%;
+    padding-right: 20px;
+  }
+
+  .main-content .right-column {
+    flex: 1;
+    max-width: 50%;
+    padding-left: 20px;
+  }
+
+  /* Services Section Styles */
+  /* Services Section Styles */
+  .services {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .services h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .service-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .service {
+    flex: 1;
+    margin: 0 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .service-info {
+    padding: 20px;
+  }
+
+  .service h3 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .service p {
+    margin-bottom: 20px;
+    color: #666;
+  }
+
+  .btn {
+    display: block;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn:hover {
+    background-color: #555;
+  }
+
+  /* Feature Boxes */
+  .feature-box {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Patient Reviews */
+  .patient-reviews {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  .patient-reviews h2 {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .review {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .review img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+
+  .review-content {
+    flex: 1;
+  }
+
+  .review strong {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .review p {
+    margin-bottom: 0;
+  }
+
+  /* Footer */
+  footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  /* Founders Section Styles */
+  .founders {
+    background-color: #f9f9f9; /* Background color similar to other sections */
+    color: #333; /* Text color similar to other sections */
+    padding: 50px 0;
+    text-align: center;
+  }
+
+  .founder-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .founder {
+    flex: 1;
+    margin: 20px;
+    background-color: #fff; /* Background color for founder containers */
+    border-radius: 8px; /* Rounded corners for founder containers */
+    padding: 20px; /* Padding for founder containers */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Box shadow for founder containers */
+  }
+
+  .founder img {
+    width: 200px; /* Adjust image size */
+    height: 200px; /* Adjust image size */
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+  }
+
+  .founder h3 {
+    margin-bottom: 10px;
+    color: #333; /* Text color for founder names */
+  }
+
+  .founder p {
+    font-style: italic;
+    color: #666; /* Text color for founder descriptions */
+  }

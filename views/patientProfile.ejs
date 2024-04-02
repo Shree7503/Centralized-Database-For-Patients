@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patient Health Summary</title>
+    <link rel="stylesheet" href="/stylesheets/patientProfile.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Patient Health Summary</h1>
+      <div class="patient-info">
+        <img
+          src="https://www.shutterstock.com/image-photo/passport-photo-portrait-middle-aged-260nw-1506715724.jpg"
+          alt="Patient Photo"
+          class="patient-photo"
+        />
+        <div class="patient-details">
+          <p>Name: John Doe</p>
+          <p>Date of Birth: January 1, 1980</p>
+          <p>Place of Birth: Ohio, United States Of America</p>
+          <p>Mobile Number: +1234567890</p>
+        </div>
+      </div>
+      <div class="summary">
+        <div class="chart-container">
+          <h2>Illness Count</h2>
+          <canvas id="illnessChart" data-chart="illnessChart"></canvas>
+          <table class="data-table" id="illnessTable"></table>
+        </div>
+        <div class="chart-container">
+          <h2>Hospitalization Count</h2>
+          <canvas
+            id="hospitalizationChart"
+            data-chart="hospitalizationChart"
+          ></canvas>
+          <table class="data-table" id="hospitalizationTable"></table>
+        </div>
+        <div class="chart-container">
+          <h2>Money Spent (in ₹)</h2>
+          <canvas id="moneySpentChart" data-chart="moneySpentChart"></canvas>
+          <table class="data-table" id="moneySpentTable"></table>
+        </div>
+        <div class="chart-container">
+          <h2>Doctor Visits</h2>
+          <canvas
+            id="doctorVisitsChart"
+            data-chart="doctorVisitsChart"
+          ></canvas>
+          <table class="data-table" id="doctorVisitsTable"></table>
+        </div>
+        <div class="chart-container">
+          <h2>Insurance Covered (in ₹)</h2>
+          <canvas id="insuranceChart" data-chart="insuranceChart"></canvas>
+          <table class="data-table" id="insuranceTable"></table>
+        </div>
+      </div>
+    </div>
+    <div class="chart-popup" id="chartPopup">
+      <div class="popup-content">
+        <canvas id="popupCanvas" class="popup-chart"></canvas>
+        <span class="close-button" onclick="closeGraphPopup()">×</span>
+        <div id="popupInfo" class="tooltip-info"></div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="/javascripts/patientProfile.js"></script>
+  </body>
+</html>

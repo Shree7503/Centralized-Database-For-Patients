@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login and Sign-up Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"
+    />
+    <link rel="stylesheet" href="/stylesheets/login.css" />
+  </head>
+  <body>
+    <div class="main-box">
+      <div class="slider-cont">
+        <div class="signup-slider">
+          <div class="img-txt">
+            <div class="img-layer"></div>
+            <h1>
+              "The doctor sees all the weakness of mankind, the lawyer all the
+              wickedness, the theologian all the stupidity."
+            </h1>
+            <img
+              src="https://plus.unsplash.com/premium_photo-1673953509975-576678fa6710?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZG9jdG9yfGVufDB8fDB8fHww"
+            />
+          </div>
+          <div class="img-txt">
+            <div class="img-layer"></div>
+            <h1>
+              "Wherever the art of Medicine is loved, there is also a love of
+              Humanity.".
+            </h1>
+            <img
+              src="https://www.businessinsider.in/photo/69795001/how-to-become-a-doctor.jpg?imgsize=137197"
+            />
+          </div>
+          <div class="img-txt">
+            <div class="img-layer"></div>
+            <h1>Join US Now!</h1>
+            <img
+              src="https://st.depositphotos.com/1518767/2411/i/950/depositphotos_24117303-stock-photo-doctor-and-his-team-smiling.jpg"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="form-cont">
+        <div class="top-buttons">
+          <button class="to-signup top-active-button">Sign Up</button>
+          <button class="to-signin">Sign In</button>
+        </div>
+        <div class="form form-signup">
+          <form action="/register" method="post">
+            <label>FULL NAME</label>
+            <input name="name" type="text" placeholder="Your full name" />
+            <label>USERNAME</label>
+            <input name="username" type="text" placeholder="Your full name" />
+            <label>E-MAIL</label>
+            <input name="email" type="email" placeholder="Your e-mail" />
+            <label>PASSWORD</label>
+            <input name="password" type="password" placeholder="Your password" />
+            <label>HOSPITAL</label>
+            <input name="hospital" type="text" placeholder="Your hospital" />
+            <label>SPECIALTY</label>
+            <input name="specialty" type="text" placeholder="Your specialty" />
+            <input type="submit" class="form-btn lined-link" value="Sign-Up" />
+          </form>
+          <br /><br />
+        </div>
+        <div class="form form-signin">
+          <form action="/login" method="post">
+            <label>User Name</label>
+            <input name="username" type="text" placeholder="Your username" />
+            <label>Password</label>
+            <input name="password" type="password" placeholder="Your password" />
+            <input type="submit" class="form-btn lined-link" value="Sign-in" />
+          </form>
+        </div>
+        <br /><br />
+      </div>
+    </div>
+    <div class="clear-fix"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script>
+      // JavaScript Code
+      $(document).ready(function () {
+        $(".signup-slider").slick({
+          dots: true,
+          arrows: false,
+          autoplay: true,
+          autoplaySpeed: 2000,
+        });
+
+        $("img").height($(".main-box").height());
+
+        $(".to-signin").on("click", function () {
+          $(this)
+            .addClass("top-active-button")
+            .siblings()
+            .removeClass("top-active-button");
+          $(".form-signup").slideUp(500);
+          $(".form-signin").slideDown(500);
+        });
+
+        $(".to-signup").on("click", function () {
+          $(this)
+            .addClass("top-active-button")
+            .siblings()
+            .removeClass("top-active-button");
+          $(".form-signin").slideUp(500);
+          $(".form-signup").slideDown(500);
+        });
+
+        $(".to-signin-link").on("click", function () {
+          $(".to-signin")
+            .addClass("top-active-button")
+            .siblings()
+            .removeClass("top-active-button");
+          $(".form-signup").slideUp(200);
+          $(".form-signin").slideDown(200);
+        });
+
+        $(".to-signup-link").on("click", function () {
+          $(".to-signup")
+            .addClass("top-active-button")
+            .siblings()
+            .removeClass("top-active-button");
+          $(".form-signin").slideUp(200);
+          $(".form-signup").slideDown(200);
+        });
+      });
+    </script>
+  </body>
+</html>
