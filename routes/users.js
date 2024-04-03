@@ -16,6 +16,6 @@ const userSchema = mongoose.Schema({
 });
 userSchema.plugin(plm);
 
-const doctorModel = mongoose.model("User", userSchema);
+mongoose.model("doctor", userSchema)
 
-module.exports = doctorModel;
+module.exports = mongoose.model("doctor", userSchema);

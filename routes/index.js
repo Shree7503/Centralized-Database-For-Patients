@@ -3,10 +3,13 @@ var router = express.Router();
 const doctorModel = require("./users");
 const patientModel = require("./patientModel");
 const passport = require("passport");
-const localStrategy = require("passport-local");
+const localStrategy = require("passport-local").Strategy;
 
-passport.use(new localStrategy(doctorModel.authenticate()));
-passport.use(new localStrategy(patientModel.authenticate()));
+const doctorStrategy = new localStrategy(doctorModel.authenticate());
+const patientStrategy = new localStrategy(patientModel.authenticate());
+
+passport.use("doctor", doctorStrategy);
+passport.use("patient", patientStrategy);
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -25,16 +28,16 @@ router.get("/login2", (req, res) => {
   res.render("login2");
 });
 
-router.get("/profile", (req, res) => {
+router.get("/doctorProfile", isLoggedIn, (req, res) => {
   res.render("doctor");
 });
 
-router.get("/patientProfile", (req, res) => {
+router.get("/patientProfile", isLoggedIn, (req, res) => {
   res.render("patientProfile");
 });
 
-router.post("/register", (req, res) => {
-  const userdata = new doctorModel({
+router.post("/register/doctor", (req, res) => {
+  const doctordata = new doctorModel({
     name: req.body.name,
     username: req.body.username,
     email: req.body.email,
@@ -42,18 +45,39 @@ router.post("/register", (req, res) => {
     specialization: req.body.specialty,
   });
   doctorModel
-    .register(userdata, req.body.password)
+    .register(doctordata, req.body.password)
     .then(function (registeredDoctor) {
-      passport.authenticate("local")(req, res, function () {
-        res.redirect("/profile");
-      });
+      res.redirect("/doctorProfile");
     });
 });
 
 router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/profile",
+  "/login/doctor",
+  passport.authenticate("doctor", {
+    successRedirect: "/doctorProfile",
+    failureRedirect: "/",
+  }),
+  (req, res) => {}
+);
+
+router.post("/register/patient", (req, res) => {
+  const userdata = new patientModel({
+    name: req.body.name,
+    username: req.body.username,
+    email: req.body.email,
+  });
+
+  patientModel
+    .register(userdata, req.body.password)
+    .then(function (registeredPatient) {
+      res.redirect("/patientProfile");
+    });
+});
+
+router.post(
+  "/login/patient",
+  passport.authenticate("patient", {
+    successRedirect: "/patientProfile",
     failureRedirect: "/",
   }),
   (req, res) => {}
@@ -65,31 +89,6 @@ router.post("/logout", (req, res) => {
     res.redirect("/login");
   });
 });
-
-router.post("/register1", (req, res) => {
-  const userdata = new patientModel({
-    name: req.body.name,
-    username: req.body.username,
-    email: req.body.email,
-  });
-
-  patientModel
-    .register(userdata, req.body.password)
-    .then(function (registeredPatient) {
-      passport.authenticate("local")(req, res, function () {
-        res.redirect("/patientProfile");
-      });
-    });
-});
-
-router.post(
-  "/login1",
-  passport.authenticate("local", {
-    successRedirect: "/patientProfile",
-    failureRedirect: "/",
-  }),
-  (req, res) => {}
-);
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
