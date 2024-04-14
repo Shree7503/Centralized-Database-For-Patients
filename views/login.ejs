@@ -53,36 +53,64 @@
           <button class="to-signin">Sign In</button>
         </div>
         <div class="form form-signup">
-          <form action="/register/doctor" method="post">
-            <label>FULL NAME</label>
-            <input name="name" type="text" placeholder="Your full name" />
-            <label>USERNAME</label>
-            <input name="username" type="text" placeholder="Your username" />
+          <form action="/register" id="signupForm" method="post">
+            <label>NAME</label>
+            <input name="name" type="text" placeholder="Your name" required />
+            <label>USER NAME</label>
+            <input
+              name="username"
+              type="text"
+              placeholder="Your username"
+              required
+            />
             <label>E-MAIL</label>
-            <input name="email" type="email" placeholder="Your e-mail" />
+            <input
+              name="email"
+              type="email"
+              placeholder="Your e-mail"
+              required
+            />
             <label>PASSWORD</label>
-            <input name="password" type="password" placeholder="Your password" />
-            <label>HOSPITAL</label>
-            <input name="hospital" type="text" placeholder="Your hospital" />
-            <label>SPECIALTY</label>
-            <input name="specialty" type="text" placeholder="Your specialty" />
-            <input type="submit" class="form-btn lined-link" value="Sign-Up" />
+            <input
+              name="password"
+              type="password"
+              placeholder="Your password"
+              required
+            />
+            <span style="color: #fff">ARE YOU A DOCTOR OR A PATIENT? </span>
+            <span style="color: #fff">ARE YOU A DOCTOR OR A PATIENT? </span>
+            <label class="container" for="doctor">
+              Doctor
+              <input type="radio" id="doctor" name="user_type" value="doctor" />
+              <span class="checkmark"></span>
+            </label>
+            <label class="container" for="patient">
+              Patient
+              <input
+                type="radio"
+                id="patient"
+                name="user_type"
+                value="patient"
+              />
+              <span class="checkmark"></span>
+            </label>
+            <span class="error-message" id="userTypeErrorMessage"></span>
+
+            <input type="submit" class="form-btn lined-link" value="Sign-up" />
           </form>
-          <br /><br />
         </div>
         <div class="form form-signin">
-          <form action="/login/doctor" method="post">
+          <form action="/signin" id="signinForm" method="post">
             <label>User Name</label>
-            <input name="username" type="text" placeholder="Your username" />
+            <input name="username" type="text" placeholder="Your username" required />
             <label>Password</label>
-            <input name="password" type="password" placeholder="Your password" />
-            <input type="submit" class="form-btn lined-link" value="Sign-in" />
+            <input name="password" type="password" placeholder="Your password" required />
+            <input type="submit" class="form-btn lined-link" value="Sign-In" />
           </form>
         </div>
-        <br /><br />
       </div>
+      <div class="clear-fix"></div>
     </div>
-    <div class="clear-fix"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
@@ -106,7 +134,6 @@
           $(".form-signup").slideUp(500);
           $(".form-signin").slideDown(500);
         });
-
         $(".to-signup").on("click", function () {
           $(this)
             .addClass("top-active-button")
@@ -116,22 +143,35 @@
           $(".form-signup").slideDown(500);
         });
 
-        $(".to-signin-link").on("click", function () {
-          $(".to-signin")
-            .addClass("top-active-button")
-            .siblings()
-            .removeClass("top-active-button");
-          $(".form-signup").slideUp(200);
-          $(".form-signin").slideDown(200);
+        $("#signupForm").submit(function (e) {
+          var userTypeCheckboxes = document.querySelectorAll(
+            'input[name="user_type"]:checked'
+          );
+
+          if (userTypeCheckboxes.length !== 1) {
+            e.preventDefault();
+            $("#userTypeErrorMessage").text(
+              "Please select only one option (Doctor or Patient)."
+            );
+            return;
+          }
         });
 
-        $(".to-signup-link").on("click", function () {
-          $(".to-signup")
-            .addClass("top-active-button")
-            .siblings()
-            .removeClass("top-active-button");
-          $(".form-signin").slideUp(200);
-          $(".form-signup").slideDown(200);
+        $("#signupForm").submit(function (e) {
+          var userTypeCheckboxes = document.querySelectorAll(
+            'input[name="user_type"]'
+          );
+          var userTypeCheckedCount = Array.from(userTypeCheckboxes).filter(
+            (checkbox) => checkbox.checked
+          ).length;
+
+          if (userTypeCheckedCount !== 1) {
+            e.preventDefault();
+            $("#userTypeErrorMessage").text(
+              "Please select only one option (Doctor or Patient)."
+            );
+            return;
+          }
         });
       });
     </script>

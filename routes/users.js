@@ -1,3 +1,4 @@
+const { name } = require("ejs");
 const mongoose = require("mongoose");
 const plm = require("passport-local-mongoose");
 
@@ -6,16 +7,13 @@ mongoose
   .then(() => console.log("Connected"))
   .catch((err) => console.error("Connection error:", err));
 
-const userSchema = mongoose.Schema({
+const authSchema = mongoose.Schema({
   name: String,
   username: String,
-  email: String,
   password: String,
-  hospital: String,
-  specialization: String,
+  user_type: String,
 });
-userSchema.plugin(plm);
 
-mongoose.model("doctor", userSchema)
+authSchema.plugin(plm);
 
-module.exports = mongoose.model("doctor", userSchema);
+module.exports = mongoose.model("user", authSchema);
