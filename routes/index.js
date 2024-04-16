@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const userModel = require("./users");
+const patientModel = require("./patientModel");
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const session = require("express-session");
@@ -24,8 +25,36 @@ router.get("/doctorProfile", isLoggedIn, (req, res) => {
   res.render("doctor");
 });
 
-router.get("/patientProfile", isLoggedIn, (req, res) => {
-  res.render("patientProfile");
+router.post("/patientForm", isLoggedIn, async (req, res)=>{
+  try {
+    formData = req.body
+
+    const newPatient = new Patient({
+      hospitalName: formData['hospital-name'],
+      location: formData['location'],
+      department: formData['department'],
+      admissionDate: formData['admission-date'],
+      dischargeDate: formData['discharge-date'],
+      reasonForVisit: formData['reason-visit'],
+      diagnosis: formData['diagnosis'],
+      procedures: formData['procedures'],
+      treatment: formData['treatment'],
+      prescription: formData['prescription'],
+      // uploadedFile: req.file ? req.file.path : null 
+  });
+  await newPatient.save();
+
+  } catch(err){
+    console.error(err);
+    res.status(500).send("Internal Server Error")
+  }
+})
+
+router.get("/patientProfile", isLoggedIn, async (req, res) => {
+  const user = await userModel.findOne({
+    username: req.session.passport.user
+  })
+  res.render("patientProfile", {user});
 });
 
 router.post("/register", (req, res) => {
@@ -33,6 +62,9 @@ router.post("/register", (req, res) => {
     name: req.body.name,
     username: req.body.username,
     email: req.body.email,
+    address: req.body.address,
+    dob: req.body.dob,
+    phoneNo: req.body.number,
     user_type: req.body.user_type,
   });
   userModel.register(userData, req.body.password).then(() => {

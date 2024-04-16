@@ -1,13 +1,19 @@
 const mongoose = require("mongoose");
-const plm = require("passport-local-mongoose");
 
-const patientSchema = mongoose.Schema({
-    username: String,
-    name: String,
-    email: String,
-    password: String
+const patientSchema = new mongoose.Schema({
+    hospitalName: String,
+    location: String,
+    department: String,
+    admissionDate: Date,
+    dischargeDate: Date,
+    reasonForVisit: String,
+    diagnosis: String,
+    procedures: String,
+    treatment: String,
+    prescription: String,
+    uploadedFile: String // You might want to store the file path or URL
 });
 
-patientSchema.plugin(plm);
+const Patient = mongoose.model("patient", patientSchema)
 
-module.exports = mongoose.model("patient", patientSchema);
+module.exports = Patient;
