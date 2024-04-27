@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/stylesheets/historyDisplay.css">
+</head>
+
+<body>
+    <nav>
+        <a href="intro.html">Home</a>
+        <a href="aboutus.html" target="_blank">About Us</a>
+        <a href="/#services">Services</a>
+        <a href="/#founders">Contact Us</a>
+    </nav>
+    <% if(successMessage.length> 0) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>
+                <%= successMessage %>
+            </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+            <% if(failureMessage.length> 0) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>
+                        <%= failureMessage %>
+                    </strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
+    <div class="container">
+        <h1>Patient History</h1>
+        <div class="patient-info">
+            <img src="https://www.shutterstock.com/image-photo/passport-photo-portrait-middle-aged-260nw-1506715724.jpg"
+                alt="Patient Photo" class="patient-photo">
+            <% data.forEach(user=> { %>
+                <p><strong>Name:</strong>
+                    <%= user.name %>
+                </p>
+                <p><strong>Username: </strong>
+                    <%=user.username %>
+                </p>
+                <p><strong>Address:</strong>
+                    <%= user.address %>
+                </p>
+                <p><strong>Date of Birth:</strong>
+                    <%= new Date(user.dob).toLocaleDateString() %>
+                </p>
+                <p><strong>Phone Number:</strong>
+                    <%= user.mobile_no %>
+                </p>
+                <p><strong>Medical Insurance:</strong> <%= user.patientDetails[0].insurance %></p>
+                <% }); %>
+
+        </div>
+        <div class="hospital-history">
+            <h2>Hospital History</h2>
+            <ul class="timeline">
+                <li class="event" data-prescription="Medication X, Dosage Y">
+                    <div class="event-content">
+                        <% data.forEach(user=> { %>
+
+                            <h3>
+                                <%= user.patientDetails[0].hospitalName %>
+                            </h3>
+                            <p>
+                                <%= user.patientDetails[0].reasonForVisit %>
+                            </p>
+                            <% }); %>
+
+                    </div>
+                </li>
+                <!-- <li class="event" data-prescription="Medication Z, Dosage W">
+                <div class="event-content">
+                    <h3>General Hospital</h3>
+                    <p>At City General Hospital in Los Angeles, John Doe was admitted to the Orthopedics department on June 10, 2023, after sustaining a fractured wrist. Following treatment, which included casting and pain medication, he was discharged on June 12, 2023. The prescribed medication included Ibuprofen, and he was advised to rest. No follow-up appointment was deemed necessary.</p></div>
+            </li>
+            <li class="event" data-prescription="Medication A, Dosage B">
+                <div class="event-content">
+                    <h3>Unity Medical Center</h3>
+                    <p>At Unity Medical Center in Chicago, John Doe sought treatment for migraine headaches, leading to admission from September 5 to September 8, 2023, under the Neurology department. Treatment primarily involved medication and intravenous therapy, with prescriptions including Sumatriptan and fluids. A follow-up appointment for a neurological evaluation is scheduled in one month.</p> </div>
+            </li>--->
+            </ul>
+        </div>
+
+        <!-- Move the button here -->
+        <a href="/updatePatient"><button class="theme-button" id="edit-patient-button">Edit Patient
+            History</button></a>
+
+    </div>
+
+    <div class="footer">
+        <span style="color:white">Log in | © 2024 NirvanCare. All Rights Reserved.</span>
+    </div>
+
+    <div class="full-page" id="fullPage1">
+        <div class="page-content">
+            <span class="close-btn" onclick="closeFullPage('fullPage1')">&times;</span>
+            <% data.forEach(user=> { %>
+                <h2>
+                    <%= user.patientDetails[0].hospitalName %>
+                </h2>
+                <p>
+                <ol>
+                    <li>Hospital Name: <%= user.patientDetails[0].hospitalName %>
+                    </li>
+                    <li>Location: <%= user.patientDetails[0].location%>
+                    </li>
+                    <li>Department: <%= user.patientDetails[0].department%>
+                    </li>
+                    <li>Admission Date: <%= new Date(user.patientDetails[0].admissionDate).toLocaleDateString() %>
+                    </li>
+                    <li>Discharge Date: <%= new Date(user.patientDetails[0].dischargeDate).toLocaleDateString()%>
+                    </li>
+                    <li>Reason for Visit: <%= user.patientDetails[0].reasonForVisit%>
+                    </li>
+                    <li>Diagnosis: <%= user.patientDetails[0].diagnosis%>
+                    </li>
+                    <li>Procedures:
+                        <ul>
+                            <li>
+                                <%= user.patientDetails[0].procedures%>
+                            </li>
+                            <%#<li> user.patientDetails[0].
+                    </li>
+                    <li> user.patientDetails[0].</li>%>
+                    </ul>
+                    </li>
+                    <li>Treatment: </li>
+                    <li>Prescription:
+                        <ul>
+                            <li>
+                                <%= user.patientDetails[0].prescription%>
+                            </li>
+                        </ul>
+                    </li>
+                    <%#<li>Follow-up:</li>%>
+                </ol>
+                </p>
+                <p><strong>Prescription:</strong>
+                    <%= user.patientDetails[0].prescription%>
+                </p>
+                <center><a href=<%= user.patientDetails[0].uploadedFile %> class="pdf-icon" target="_blank" rel="noopener noreferrer">X-ray</a>
+                </center>
+                <% }); %>
+        </div>
+    </div>
+    <!-- <div class="full-page" id="fullPage2">
+        <div class="page-content">
+            <span class="close-btn" onclick="closeFullPage('fullPage2')">&times;</span>
+            <h2>City General Hospital</h2>
+            <p>
+            <ol>
+                <li>Hospital Name: City General Hospital</li>
+                <li>Location: Los Angeles</li>
+                <li>Department: Orthopedics</li>
+                <li>Admission Date: June 10, 2023</li>
+                <li>Discharge Date: June 12, 2023</li>
+                <li>Reason for Visit: Fractured Wrist</li>
+                <li>Treatment:
+                    <ul>
+                        <li>Casting</li>
+                        <li>Pain Medication</li>
+                    </ul>
+                </li>
+                <li>Prescription:
+                    <ul>
+                        <li>Ibuprofen</li>
+                        <li>Rest</li>
+                    </ul>
+                </li>
+                <li>Follow-up: None required</li>
+            </ol>
+            <p><strong>Prescription:</strong> Medication Z, Dosage W</p><br><br>
+            <a href="sample.pdf" class="pdf-icon" target="_blank" rel="noopener noreferrer">Scan</a>
+        </div>
+    </div>
+
+    <div class="full-page" id="fullPage3">
+        <div class="page-content">
+            <span class="close-btn" onclick="closeFullPage('fullPage3')">&times;</span>
+            <h2>Unity Medical Center</h2>
+            <p>
+            <ol>
+                <li>Hospital Name: Unity Medical Center</li>
+                <li>Location: Chicago</li>
+                <li>Department: Neurology</li>
+                <li>Admission Date: September 5, 2023</li>
+                <li>Discharge Date: September 8, 2023</li>
+                <li>Reason for Visit: Migraine Headaches</li>
+                <li>Treatment:
+                    <ul>
+                        <li>Medication</li>
+                        <li>Intravenous Therapy</li>
+                    </ul>
+                </li>
+                <li>Prescription:
+                    <ul>
+                        <li>Sumatriptan</li>
+                        <li>Fluids</li>
+                    </ul>
+                </li>
+                <li>Follow-up: Scheduled neurological evaluation in one month</li>
+            </ol>
+            <p><br>
+                <a href="sample.pdf" class="pdf-icon" target="_blank" rel="noopener noreferrer">MRI</a>
+        </div>
+    </div> -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const events = document.querySelectorAll(".event");
+
+            events.forEach(function (event, index) {
+                event.addEventListener("click", function () {
+                    const fullPageId = "fullPage" + (index + 1);
+                    openFullPage(fullPageId);
+                });
+            });
+        });
+
+        function openFullPage(id) {
+            const fullPage = document.getElementById(id);
+            fullPage.classList.add("active");
+        }
+
+        function closeFullPage(id) {
+            const fullPage = document.getElementById(id);
+            fullPage.classList.remove("active");
+        }
+
+        function changeTheme() {
+            // Toggle between light and dark themes by toggling a class on the body
+            document.body.classList.toggle('light-theme');
+        }
+    </script>
+</body>
+
+</html>

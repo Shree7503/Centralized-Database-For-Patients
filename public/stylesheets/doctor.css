@@ -15,7 +15,7 @@
   /* Header */
   /* Header */
   header {
-    background-image: url("https://wallpapers.com/images/hd/caduceus-medical-symbol-gray-border-1kcbxqpyjezaw6dt.jpg"); /* Add semicolon */
+background-color: rgb(51, 51, 51); /* Add semicolon */
     background-size: cover; /* Adjust background size as needed */
     background-position: center; /* Center the background image */
     color: #fff; /* Set text color to white */
@@ -110,3 +110,20 @@
   footer a:hover {
     background-color: #0047b3;
   }
+
+  nav {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #333;
+  }
+  
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+  }
+  
+  nav a:hover {
+    background-color: #555;
+  }
+  

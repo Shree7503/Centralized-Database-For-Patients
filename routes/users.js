@@ -12,6 +12,9 @@ const authSchema = mongoose.Schema({
   username: String,
   password: String,
   user_type: String,
+  address: String,
+  dob: Date,
+  mobile_no: Number,
 });
 
 authSchema.plugin(plm);

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /* Prevents scrolling due to large background */
+            background-color: #f2f2f2;
+            /* Light gray background */
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .booking-form {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            font-family: sans-serif;
+            /* font-weight: bold; */
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        button[type="submit"] {
+            background-color: rgb(51, 51, 51);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: red;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Animated Background Images */
+        .background-images {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 300%;
+            /* Set width to accommodate multiple images */
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            animation: slideImages 5000s linear infinite;
+            /* Change animation duration */
+            overflow: hidden;
+        }
+
+        .background-images img {
+            float: left;
+            width: 10.142857%;
+            /* Set width for each image (assuming 14 images) */
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes slideImages {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-1400%);
+            }
+        }
+
+        input[type="date"] {
+            color: grey;
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            font-weight: 200;
+            margin-bottom: 20px;
+            padding: 5px 0 10px 0;
+            background: transparent;
+            border-bottom: 1px solid #4c5c72;
+        }
+
+        #problem,
+        #doctor,
+        #hospital,
+        #preferred-time,
+        #preferred-date,
+        #username {
+            color: grey;
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            font-weight: 200;
+            margin-bottom: 20px;
+            padding: 5px 0 10px 0;
+            background: transparent;
+            border-bottom: 1px solid #4c5c72;
+        }
+
+        nav {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #404040;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="intro.html">Home</a>
+        <a href="aboutus.html" target="_blank">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#founders">Contact Us</a>
+    </nav>
+
+    <main>
+        <section class="booking-form">
+            <h2>Book an Appointment</h2>
+            <form id="appointment-form" action="/bookAppointment" method="post">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required />
+
+                <label for="doctor">Select your Doctor</label>
+                <select name="doctorName" id="doctor" required>
+                <% getDoctors.forEach(user=>{ %>
+
+                        <option value=" <%= user.name %>">Dr. <%= user.name %></option>
+
+                    <% }) %>
+                </select>
+
+                        <label for="problem">Describe Your Problem:</label>
+                        <textarea name="problem" id="problem" rows="4" required></textarea>
+
+                        <!-- <label for="preferred-date">Date:</label>
+                        <input name="date" type="date" id="preferred-date" required />
+
+                        <label for="preferred-time">Preffered Time:</label>
+                        <input name="time" type="time" id="preferred-time" required /> -->
+
+                        <button type="submit">Book Appointment</button>
+            </form>
+            <p id="booking-message" style="display: none; color: green">
+                Booking accepted. We'll let you know as soon as possible!
+            </p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 NirvanCare. All rights reserved.</p>
+    </footer>
+
+    <div class="background-images">
+        <!-- <img src="https://www.verywellhealth.com/thmb/XHhQWkEg9aMaEEbXjQLm1jFBGz0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/VWH-GettyImages-1406496671-d559150d3c294b8282f546c5bbf21157.jpg"
+            alt="Background Image" />
+        <img src="https://i.tribune.com.pk/media/images/2225461-doctor-1589963876/2225461-doctor-1589963876.jpg"
+            alt="Background Image" />
+        <img src="https://www.gigadocs.com/blog/wp-content/uploads/2019/12/blog.jpg" alt="Background Image" />
+        <img src="https://c8.alamy.com/comp/2JPR5MJ/doctor-appointment-by-a-woman-consulting-a-healthcare-or-medical-worker-in-an-office-about-covid-symptoms-male-african-american-gp-talking-to-a-2JPR5MJ.jpg"
+            alt="bagroung image" /> -->
+        <!-- Add more background images as needed -->
+    </div>
+
+    <!-- <script>
+        // Handle form submission (simulated)
+        const appointmentForm = document.getElementById("appointment-form");
+        appointmentForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Handle form submission (simulated)
+            const appointmentForm = document.getElementById("appointment-form");
+            appointmentForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                const formDataObject = Object.fromEntries(formData.entries());
+                console.log("Form data submitted:", formDataObject);
+
+                // Display booking accepted message
+                const bookingMessage = document.getElementById("booking-message");
+                bookingMessage.style.display = "block";
+
+                // Clear form data
+                appointmentForm.reset();
+
+                // Remove message after 5 seconds
+                setTimeout(function () {
+                    bookingMessage.style.display = "none";
+                }, 5000); // 5000 milliseconds = 5 seconds
+            });
+        });
+    </script> -->
+</body>
+
+</html>

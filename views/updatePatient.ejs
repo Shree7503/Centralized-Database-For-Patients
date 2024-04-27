@@ -27,34 +27,61 @@
   <body>
     <div class="container animated in">
       <h1>Patient Details</h1>
-      <form action="/patientForm" id="patient-form" method="post" enctype="multipart/form-data">
+      <form action="/updateForm" id="patient-form" method="post">
+        <input type="hidden" name="_method" value="PUT" />
+        <% data.forEach((user)=> { %>
         <div class="form-group">
           <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required />
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value="<%= user.username %>"
+          />
         </div>
         <div class="form-group">
           <label for="hospital-name">Hospital Name:</label>
-          <input type="text" id="hospital-name" name="hospital-name" required />
+          <input
+            type="text"
+            id="hospital-name"
+            name="hospitalName"
+            value="<%= user.patientDetails[0].hospitalName %>"
+          />
         </div>
         <div class="form-group">
           <label for="location">Location:</label>
-          <input type="text" id="location" name="location" required />
+          <input
+            type="text"
+            id="location"
+            name="location"
+            value="<%= user.patientDetails[0].location%>"
+          />
         </div>
         <div class="form-group">
           <label for="department">Department:</label>
-          <input type="text" id="department" name="department" required />
+          <input
+            type="text"
+            id="department"
+            name="department"
+            value="<%= user.patientDetails[0].department%>"
+          />
         </div>
         <div class="form-group">
           <label for="department">Medical Insurance:</label>
-          <input type="text" id="department" name="insurance" required />
+          <input
+            type="text"
+            id="department"
+            name="insurance"
+            value="<%= user.patientDetails[0].insurance %>"
+          />
         </div>
         <div class="form-group">
           <label for="admission-date">Admission Date:</label>
           <input
             type="date"
             id="admission-date"
-            name="admission-date"
-            required
+            name="admissionDate"
+            value="<%= new Date(user.patientDetails[0].admissionDate).toLocaleDateString()%>"
           />
         </div>
         <div class="form-group">
@@ -62,29 +89,39 @@
           <input
             type="date"
             id="discharge-date"
-            name="discharge-date"
-            required
+            name="dischargeDate"
+            value="<%= new Date(user.patientDetails[0].dischargeDate).toLocaleDateString()%>"
           />
         </div>
         <div class="form-group">
           <label for="reason-visit">Reason for Visit:</label>
-          <textarea id="reason-visit" name="reason-visit" required></textarea>
+          <textarea id="reason-visit" name="reasonForVisit">
+<%=user.patientDetails[0].reasonForVisit%></textarea
+          >
         </div>
         <div class="form-group">
           <label for="diagnosis">Diagnosis:</label>
-          <textarea id="diagnosis" name="diagnosis" required></textarea>
+          <textarea id="diagnosis" name="diagnosis">
+<%=user.patientDetails[0].diagnosis%></textarea
+          >
         </div>
         <div class="form-group">
           <label for="procedures">Procedures:</label>
-          <textarea id="procedures" name="procedures" required></textarea>
+          <textarea id="procedures" name="procedures">
+<%=user.patientDetails[0].procedures%></textarea
+          >
         </div>
         <div class="form-group">
           <label for="testment">Treatment:</label>
-          <textarea id="testment" name="treatment" required></textarea>
+          <textarea id="testment" name="treatment">
+<%=user.patientDetails[0].treatment%></textarea
+          >
         </div>
         <div class="form-group">
           <label for="prescription">Prescription:</label>
-          <textarea id="prescription" name="prescription" required></textarea>
+          <textarea id="prescription" name="prescription">
+<%=user.patientDetails[0].prescription%></textarea
+          >
         </div>
         <div class="form-group">
           <label>Upload MRI or Scan or X-Ray:</label>
@@ -93,38 +130,24 @@
           </label>
           <input type="file" id="file-upload" name="scan" />
         </div>
+        <% }) %>
         <!-- Other form fields... -->
 
-        <button type="submit">Submit</button>
+        <button type="submit" id="back">Submit</button>
       </form>
       <div id="submission-message" class="submission-message"></div>
     </div>
 
     <!-- <script>
-      document
-        .getElementById("patient-form")
-        .addEventListener("submit", function (event) {
-          event.preventDefault(); // Prevent form submission
-
-          // Show submission message
-          document.getElementById("submission-message").textContent =
-            "Data submitted successfully. It will be updated.";
-          document.getElementById("submission-message").style.display = "block"; // Show the message
-          setTimeout(function () {
-            document.getElementById("submission-message").style.bottom = "20px"; // Show the message
-          }, 100); // Delay showing the message for smooth animation
-          setTimeout(function () {
-            document.getElementById("submission-message").style.bottom =
-              "-40px"; // Hide the message
-            setTimeout(function () {
-              document.getElementById("submission-message").style.display =
-                "none"; // Hide the message
-            }, 500); // Delay hiding the message after animation
-          }, 3000); // Show the message for 3 seconds
-
-          // Here you can add code to submit the form data to the server
-          this.reset(); // Reset form fields after submission
-        });
-    </script> -->
+                        document
+                            .getElementById("back")
+                            .addEventListener("click", function (event) {
+                                event.preventDefault();
+                                document.getElementById("patient-form").submit();
+                                setTimeout(function () {
+                                    window.history.back();
+                                }, 1000);
+                            });
+                    </script> -->
   </body>
 </html>
