@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription: History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="/images/favicon.jpg">
+    <link rel="stylesheet" href="/stylesheets/prescription.css" />
+    <style>
+        @media print {
+            .myDiv {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+    </header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/aboutus" target="_blank">About Us</a>
+        <a href="/#services">Services</a>
+        <a href="/#founders">Contact Us</a>
+      </nav>
+    <div class="doctor-container">
+        <!-- Doctor Name -->
+        <h2>Dr. <%=data[0].doctorName %>
+        </h2>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search dates...">
+            <button onclick="searchPrescription()" class="search-btn">Search</button>
+        </div>
+
+    </div>
+
+    <!-- Prescription Containers -->
+    <% data.reverse().forEach((user, index)=> { %>
+
+        <div class="prescription-container" class="myDiv" onclick="showZoomedPrescription('<%= index+1 %>')">
+            <!-- Prescription Content -->
+            <div class="prescription-content">
+                <h2><%= new Date(user.date).toLocaleDateString() %>
+                </h2>
+
+                <p>
+                <ul>
+                    <li>
+                        <strong>Medication: </strong>
+                        <%= user.medication %>
+                            <ul>
+                                <li><strong>Generic Name:</strong>
+                                    <%= user.genericName %>
+                                </li>
+                                <li><strong>Strength:</strong>
+                                    <%= user.strength %>
+                                </li>
+                                <li><strong>Form:</strong>
+                                    <%= user.form %>
+                                </li>
+                            </ul>
+                    </li>
+                    <li>
+                        <strong>Dosage:</strong>
+                        <%= user.dosage %>
+
+                            <ul>
+                                <li><strong>Frequency:</strong>
+                                    <%= user.frequency %>
+                                </li>
+                                <li><strong>Indication:</strong>
+                                    <%= user.indication %>
+                                </li>
+                                <li><strong>Instructions:</strong>
+                                    <%= user.instruction %>
+                                </li>
+                                <li><strong>Duration:</strong>
+                                    <%= user.duration %>
+                                </li>
+                                <li><strong>Precautions:</strong>
+                                    <%= user.precautions %>
+                                </li>
+                                <li>
+                                    <a href="/report-generate/<%= user._id %>">Pdf</a>
+                                </li>
+                            </ul>
+                    </li>
+                </ul>
+                </p>
+
+            </div>
+        </div>
+        <% }); %>
+
+            <br>
+            <br>
+
+            <!-- Zoomed Prescription Container -->
+            <div id="zoomedPrescription" class="zoomed-prescription"></div>
+
+            <!-- <a href="history.html" class="back-btn">Back</a> -->
+
+
+
+            <footer>
+                <!-- Copyright -->
+                <p>&copy; 2024 NirvanCare. All rights reserved.</p>
+            </footer>
+
+            <script>
+                // Function to show zoomed prescription
+                function showZoomedPrescription(containerNumber) {
+                    var container = document.getElementsByClassName("prescription-container")[containerNumber - 1];
+                    var prescriptionContent = container.innerHTML;
+                    var zoomedPrescription = document.getElementById("zoomedPrescription");
+                    zoomedPrescription.innerHTML = prescriptionContent;
+                    // Adding close button
+                    zoomedPrescription.innerHTML += '<span class="close-btn" onclick="closeZoomedPrescription()">&times;</span>';
+                    // Increase font size
+                    zoomedPrescription.style.fontSize = "20px"; // Adjust the font size as needed
+                    zoomedPrescription.classList.add("active"); // Adding active class to apply styles
+                }
+
+                function searchPrescription() {
+                    var searchTerm = document.getElementById("searchInput").value.replace(/\s/g, ''); // Remove spaces from search term
+                    var prescriptionDates = document.querySelectorAll(".prescription-container h2");
+                    var found = false;
+
+                    // Regex pattern to match dates of type dd/mm/yyyy
+                    var dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
+
+                    prescriptionDates.forEach(function (date, index) {
+                        var dateText = date.textContent;
+                        console.log(dateText)
+                        if (dateText.includes(searchTerm)) {
+                            found = true;
+                            showZoomedPrescription(index + 1);
+                        }
+                    });
+                    if (!found) {
+                        alert("Prescription not found for the entered date.");
+                    }
+                }
+                // Function to close zoomed prescription
+                function closeZoomedPrescription() {
+                    var zoomedPrescription = document.getElementById("zoomedPrescription");
+                    zoomedPrescription.classList.remove("active"); // Removing active class to hide
+                    // Clear content
+                    zoomedPrescription.innerHTML = "";
+                }
+            </script>
+</body>
+
+</html>

@@ -18,9 +18,12 @@
     <link rel="stylesheet" href="/stylesheets/search.css" />
   </head>
   <body>
-    <header>
-      <img src="/images/logo.png" alt="NirvanCare Logo" />
-    </header>
+    <nav>
+      <a href="intro.html">Home</a>
+      <a href="aboutus.html" target="_blank">About Us</a>
+      <a href="#services"> Services</a>
+      <a href="#founders">Contact Us</a>
+    </nav>
 
     <% if(messages.length > 0) { %>
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -48,8 +51,8 @@
         <input
           type="text"
           id="username"
-          name="userID"
-          placeholder="Enter your ID"
+          name="otp"
+          placeholder="Enter your OTP"
           required
         />
         <input type="submit" value="Submit" />

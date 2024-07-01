@@ -27,9 +27,8 @@
   <body>
     <div class="container animated in">
       <h1>Patient Details</h1>
-      <form action="/updateForm" id="patient-form" method="post">
+      <form action="/updateForm/<%= user._id %>" id="patient-form" method="post">
         <input type="hidden" name="_method" value="PUT" />
-        <% data.forEach((user)=> { %>
         <div class="form-group">
           <label for="username">Username:</label>
           <input
@@ -45,7 +44,7 @@
             type="text"
             id="hospital-name"
             name="hospitalName"
-            value="<%= user.patientDetails[0].hospitalName %>"
+            value="<%= user.hospitalName %>"
           />
         </div>
         <div class="form-group">
@@ -54,7 +53,7 @@
             type="text"
             id="location"
             name="location"
-            value="<%= user.patientDetails[0].location%>"
+            value="<%= user.location%>"
           />
         </div>
         <div class="form-group">
@@ -63,16 +62,7 @@
             type="text"
             id="department"
             name="department"
-            value="<%= user.patientDetails[0].department%>"
-          />
-        </div>
-        <div class="form-group">
-          <label for="department">Medical Insurance:</label>
-          <input
-            type="text"
-            id="department"
-            name="insurance"
-            value="<%= user.patientDetails[0].insurance %>"
+            value="<%= user.department%>"
           />
         </div>
         <div class="form-group">
@@ -81,7 +71,7 @@
             type="date"
             id="admission-date"
             name="admissionDate"
-            value="<%= new Date(user.patientDetails[0].admissionDate).toLocaleDateString()%>"
+            value="<%= new Date(user.admissionDate).toLocaleDateString()%>"
           />
         </div>
         <div class="form-group">
@@ -90,47 +80,46 @@
             type="date"
             id="discharge-date"
             name="dischargeDate"
-            value="<%= new Date(user.patientDetails[0].dischargeDate).toLocaleDateString()%>"
+            value="<%= new Date(user.dischargeDate).toLocaleDateString()%>"
           />
         </div>
         <div class="form-group">
           <label for="reason-visit">Reason for Visit:</label>
           <textarea id="reason-visit" name="reasonForVisit">
-<%=user.patientDetails[0].reasonForVisit%></textarea
+<%=user.reasonForVisit%></textarea
           >
         </div>
         <div class="form-group">
           <label for="diagnosis">Diagnosis:</label>
           <textarea id="diagnosis" name="diagnosis">
-<%=user.patientDetails[0].diagnosis%></textarea
+<%=user.diagnosis%></textarea
           >
         </div>
         <div class="form-group">
           <label for="procedures">Procedures:</label>
           <textarea id="procedures" name="procedures">
-<%=user.patientDetails[0].procedures%></textarea
+<%=user.procedures%></textarea
           >
         </div>
         <div class="form-group">
           <label for="testment">Treatment:</label>
           <textarea id="testment" name="treatment">
-<%=user.patientDetails[0].treatment%></textarea
+<%=user.treatment%></textarea
           >
         </div>
         <div class="form-group">
           <label for="prescription">Prescription:</label>
           <textarea id="prescription" name="prescription">
-<%=user.patientDetails[0].prescription%></textarea
+<%=user.prescription%></textarea
           >
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label>Upload MRI or Scan or X-Ray:</label>
           <label for="file-upload" class="upload-btn">
             <span class="upload-icon">&#128206;</span> Choose File
           </label>
           <input type="file" id="file-upload" name="scan" />
-        </div>
-        <% }) %>
+        </div> -->
         <!-- Other form fields... -->
 
         <button type="submit" id="back">Submit</button>

@@ -3,9 +3,11 @@ const mongoose = require("mongoose");
 const patientSchema = new mongoose.Schema({
     username: String,
     hospitalName: String,
+    doctorName: String,
+    doctorUsername: String,
+    bloodGroup: String,
     location: String,
     department: String,
-    insurance: String,
     admissionDate: Date,
     dischargeDate: Date,
     reasonForVisit: String,

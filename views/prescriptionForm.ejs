@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prescription Form</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="shortcut icon" href="./images/logo.jpg" />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        color: #333333;
+        position: relative;
+      }
+
+      h1 {
+        text-align: center;
+        color: #000000;
+        margin-bottom: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+        box-shadow: rgb(51, 51, 51);
+      }
+
+      .form-group label {
+        font-weight: bold;
+        color: #333333;
+      }
+
+      input,
+      textarea {
+        outline: solid lightgrey;
+        outline-width: thin;
+      }
+      nav {
+        text-align: center;
+        padding: 20px 0;
+        background-color: #333;
+      }
+
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 20px;
+      }
+
+      nav a:hover {
+        background-color: #555;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="date"],
+      .form-group textarea {
+        width: calc(100% - 20px);
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+        background-color: #fff;
+        color: #333333;
+      }
+
+      .form-group textarea {
+        height: 100px;
+      }
+
+      button[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 15px 30px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+    </style>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/aboutus" target="_blank">About Us</a>
+      <a href="#services"> Services</a>
+      <a href="#founders">Contact Us</a>
+      <a href="/doctorDashboard">Dashboard</a>
+    </nav>
+    <% if(message.length>0) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>
+            <%= message %>
+          </strong>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        <% } %>
+
+  </head>
+  <body>
+    <div class="container animated in">
+      <h1>Prescription Form</h1>
+      <form id="medication-form" action="/submitPrescription" method="post">
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+        <div class="form-group">
+          <label for="username">Patient's Username:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div class="form-group">
+          <label for="medication">Medication:</label>
+          <input type="text" id="medication" name="medication" placeholder="Drug1, Drug2, Drug 3 ..." required />
+        </div>
+        <div class="form-group">
+          <label for="generic-name">Generic Name:</label>
+          <input type="text" id="generic-name" name="genericName" placeholder="Name 1, Name 2, Name 3 ..." required />
+        </div>
+        <div class="form-group">
+          <label for="strength">Strength:</label>
+          <input type="text" id="strength" name="strength" placeholder="Strength 1, Strength 2, Strength 3 ..." required />
+        </div>
+        <div class="form-group">
+          <label for="form">Form:</label>
+          <input type="text" id="form" name="form" placeholder="Form 1, Form 2, Form 3 ..." required />
+        </div>
+        <div class="form-group">
+          <label for="dosage">Dosage:</label>
+          <input type="text" id="dosage" name="dosage" placeholder="Dosage 1, Dosage 2, Dosage 3 ..." required />
+        </div>
+        <div class="form-group">
+          <label for="frequency">Frequency:</label>
+          <input type="text" id="frequency" name="frequency" placeholder="Frequency 1, Frequency 2, Frequency 3 ..." required />
+        </div>
+        <div class="form-group">
+          <label for="indication">Indication:</label>
+          <textarea id="indication" name="indication" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="instructions">Instructions:</label>
+          <textarea id="instructions" name="instructions" placeholder="Instruction 1, Instruction 2, Instruction 3 ..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="duration">Duration:</label>
+          <input type="text" id="duration" name="duration" required />
+        </div>
+        <div class="form-group">
+          <label for="precautions">Precautions:</label>
+          <textarea id="precautions" name="precautions" required></textarea>
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("submit-form")
+        .addEventListener("click", function (event) {
+          // Check if all required fields are filled
+          var isValid = true;
+          var inputs = document.querySelectorAll("input, textarea");
+          inputs.forEach(function (input) {
+            if (input.required && !input.value.trim()) {
+              isValid = false;
+            }
+          });
+
+          if (!isValid) {
+            event.preventDefault(); // Prevent default behavior of anchor tag
+            alert("Please fill in all the required fields.");
+          } else {
+            // Reset the form
+            document.getElementById("medication-form").reset();
+          }
+        });
+    </script>
+  </body>
+</html>

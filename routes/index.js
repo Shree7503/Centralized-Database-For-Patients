@@ -1,11 +1,16 @@
 var express = require("express");
+const { ObjectId } = require('mongodb');
 var router = express.Router();
 const userModel = require("./users");
 const patientModel = require("./patientModel");
 const appointmentModel = require("./appointmentModel");
+const prescriptionModel = require("./prescription");
+const otpModel = require("./otp");
+const pdf = require("./pdf")
 const upload = require("./multer");
 const passport = require("passport");
-const { default: mongoose } = require("mongoose");
+const nodemailer = require("nodemailer");
+const base32 = require("base32");
 const localStrategy = require("passport-local").Strategy;
 
 passport.use(new localStrategy(userModel.authenticate()));
@@ -30,28 +35,100 @@ router.get("/doctorDashboard", isLoggedIn, isDoctor, (req, res) => {
   res.render("doctor");
 });
 
-router.get("/doctorProfile", (req, res) => {
-  res.render("doctorProfile");
-});
-
 router.get("/search", (req, res) => {
   res.render("search", { messages: req.flash("message") });
 });
 
-router.get("/updatePatient", async (req, res) => {
-  const user = await userModel.findOne({
-    username: req.session.username,
-  });
-  getUserData(user._id).then((data) => {
-    res.render("updatePatient", {
-      data,
-    });
+router.get("/report/:username", async (req, res)=>{
+  const username = req.params.username;
+  const data = await prescriptionModel.find({doctorUsername: username});
+  console.log(data)
+  res.render("prescription", {data});
+});
+
+router.get("/pdfReport/:id", async (req, res)=>{
+  const userID = req.params.id;
+  const data = await prescriptionModel.findById(userID);
+  const doctor = await userModel.findOne({username: data.doctorUsername});
+  const patient = await userModel.findOne({username: data.username});
+  const file = await patientModel.findOne({username: data.username})
+  const file1 = file.uploadedFile;
+  console.log(file1);
+  const file2 = file1.replace(/\.\//g, "/");
+  console.log(file2)
+  const medicationInfo = {
+    drug: seperate(data.medication.toString()),
+    dosage: seperate(data.dosage.toString()),
+    frequency: seperate(data.frequency.toString()),
+    info: seperate(data.instructions.toString()),
+    date: data.date,
+    precautions: data.precautions,
+  }
+  function seperate(a) {
+    const cleanedString = a.replace(/\nundefined/g, '');
+    return cleanedString.split(",").map(medication => medication.trim());
+  }
+  res.render("report", {data: medicationInfo, doctor: doctor, patient: patient, file2: file2});
+});
+
+router.get("/prescriptionForm", (req, res)=>{
+  res.render("prescriptionForm", {
+    message: req.flash("message")
   });
 });
 
-router.put("/updateForm", async (req, res) => {
-  const updatedPatient = await patientModel.findOneAndUpdate(
-    { username: req.session.username },
+router.post("/submitPrescription", async (req, res)=>{
+  const doctor = await userModel.findOne({username: req.session.passport.user});
+  const newPrescription = new prescriptionModel({
+    date: req.body.date,
+    username: req.body.username,
+    doctorUsername: req.session.passport.user,
+    doctorName: doctor.name,
+    medication: req.body.medication,
+    genericName: req.body.genericName,
+    strength: req.body.strength,
+    form: req.body.form,
+    dosage: req.body.dosage,
+    frequency: req.body.frequency,
+    indication: req.body.indication,
+    instructions: req.body.instructions,
+    duration: req.body.duration,
+    precautions: req.body.precautions
+  });
+  await newPrescription.save();
+  req.flash("message", "Prescirption Submitted!");
+  res.redirect("/prescriptionForm");
+});
+
+router.get("/report-generate/:id", pdf.generatePdfPrescription);
+
+router.post("/generateOTP", async (req, res) => {
+  const secret = Math.floor(10000 + Math.random() * 90000);
+  const expirationTime = new Date();
+  expirationTime.setMinutes(expirationTime.getMinutes() + 5);
+  const otpSecret = base32.encode(secret.toString());
+  const otpExpiration = expirationTime;
+
+  const newotpData = new otpModel({
+    username: req.user.username,
+    otpSecret: otpSecret,
+    otpExpiration: otpExpiration,
+  });
+  await newotpData.save();
+
+  sendEmailAlert(req.body.email, secret);
+  res.redirect("/patientDashboard");
+});
+
+router.get("/updatePatient/:id", async (req, res) => {
+  patientModel.findById(req.params.id).then((user) => {
+    res.render("updatePatient", { user });
+  });
+});
+
+router.put("/updateForm/:id", async (req, res) => {
+  const updatedPatient = await patientModel.findByIdAndUpdate(
+    req.params.id,
     req.body,
     {
       new: true,
@@ -70,40 +147,160 @@ router.get("/historyForm", isLoggedIn, isDoctor, (req, res) => {
 });
 
 router.get("/displayHistory", async (req, res) => {
-  const username = req.session.username;
-  const userID = req.session.userID;
+  const user = userModel.findOne({ username: req.session.passport.user });
 
-  getUserData(userID).then((data) => {
-    res.render("historyDisplay", {
-      data,
-      successMessage: req.flash("successMessage"),
-      failureMessage: req.flash("failureMessage"),
+  if (user.user_type === "doctor") {
+    const username = req.session.username;
+    getUserData(username).then((data) => {
+      res.render("historyDisplay", {
+        data,
+        successMessage: req.flash("successMessage"),
+        failureMessage: req.flash("failureMessage"),
+      });
     });
-  });
+  } else {
+    const username = req.session.passport.user;
+    getUserData(username).then((data) => {
+      res.render("historyDisplay", {
+        data,
+        successMessage: req.flash("successMessage"),
+        failureMessage: req.flash("failureMessage"),
+      });
+    });
+  }
 });
 
 router.post("/join", async (req, res) => {
   const username = req.body.username;
-  const userID = String(req.body.userID);
-  const user = await userModel.findOne({ username: req.body.username });
+  const otp = req.body.otp;
+  const user = await otpModel.findOne({ username: username });
+
   if (user === null) {
-    req.flash("message", "Incorrect Username or UserID");
+    req.flash("message", "Incorrect Username, User not found!");
     res.redirect("/search");
-  } else {
+  }
+  const decodedotpSecret = base32.decode(user.otpSecret);
+  if (
+    !decodedotpSecret ||
+    !user.otpExpiration ||
+    user.otpExpiration < new Date()
+  ) {
+    req.flash("message", "OTP expired or not generated");
+    res.redirect("/search");
+  }
+  if (otp === decodedotpSecret) {
     req.session.username = username;
-    req.session.userID = userID;
     res.redirect("/displayHistory");
+  } else {
+    req.flash("message", "Incorrect OTP");
+    res.redirect("/search");
   }
 });
 
-router.get("/appointment", async (req, res)=>{
-  const getDoctors = await userModel.find({user_type: "doctor"})
-  res.render("appointment", { getDoctors });
+router.get("/viewAppointment", async (req, res) => {
+  const appointments = await appointmentModel.find({
+    doctorName: req.session.passport.user,
+  });
+  res.render("appointmentDoctor", { appointments });
 });
 
-router.post("/bookAppointment", (req, res)=>{
-  console.log(req.body);
+router.post("/accept", async (req, res) => {
+  const appointments = await appointmentModel.find({
+    doctorName: req.session.passport.user,
+  });
+  console.log(appointments);
+  const patient = await userModel.findOne({ username: appointments.username });
+  console.log(patient);
+  const doctor = await userModel.findOne({
+    username: req.session.passport.user,
+  });
+  console.log(doctor);
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+      user: "nirvancareonline@gmail.com",
+      pass: "hqvxwdcgpfstjdyg",
+    },
+  });
+  const mailOptions = {
+    from: { name: doctor.name, address: "nirvancareonline@gmail.com" },
+    to: req.body.email,
+    subject: "Appointment Accepted",
+    text: req.body.time,
+  };
+
+  transporter.sendMail(mailOptions).then(() => {
+    console.log("Mail Sent");
+  });
+
+  res.redirect("/viewAppointment");
+});
+
+router.post("/reject", async (req, res) => {
+  const appointments = await appointmentModel.find({
+    doctorName: req.session.passport.user,
+  });
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+      user: "nirvancareonline@gmail.com",
+      pass: "hqvxwdcgpfstjdyg",
+    },
+  });
+
+  const name = "Dr. " + req.body.name;
+
+  const mailOptions = {
+    from: { name: name, address: "nirvancareonline@gmail.com" },
+    to: req.body.email,
+    subject: "Appointment Rejection",
+    text: req.body.reason,
+  };
+
+  transporter.sendMail(mailOptions).then(() => {
+    console.log("Mail Sent");
+  });
+
+  res.redirect("/viewAppointment");
+});
+
+router.get("/appointment", isLoggedIn, async (req, res) => {
+  const getDoctors = await userModel.find({ user_type: "doctor" });
+  res.render("appointment", {
+    getDoctors,
+    successMessage: req.flash("successMessage"),
+  });
+});
+
+router.delete("/deleteAppointment/:id", async (req, res)=>{
+   const userID = req.params.id;
+   await appointmentModel.deleteOne({_id: new ObjectId(userID)});
+   res.redirect("/viewAppointment");
 })
+
+router.post("/bookAppointment" ,async (req, res) => {
+  const user = await userModel.findOne({ username: req.session.passport.user });
+  const newAppointment = new appointmentModel({
+    username: user.username,
+    name: user.name,
+    doctorName: req.body.doctorName,
+    problem: req.body.problem,
+    date: req.body.date,
+  });
+
+  await newAppointment.save();
+  console.log(newAppointment);
+  req.flash(
+    "successMessage",
+    "Your appointment request has been successfully forwarded to your doctor. You can expect updates via email."
+  );
+  res.redirect("/appointment");
+});
 
 router.post(
   "/patientForm",
@@ -112,13 +309,25 @@ router.post(
   async (req, res) => {
     try {
       formData = req.body;
-
+     await userModel.updateOne(
+        {
+          username: req.body.username,
+        },
+        {
+          $set: { insurance: req.body.insurance },
+        }
+      );
+      const doctor = await userModel.findOne({username: req.user.username});
+      console.log(req.session.passport.user);
+      console.log(doctor);
       const newPatient = new patientModel({
         username: formData["username"],
+        doctorName: doctor.name,
+        doctorUsername: doctor.username,
+        bloodGroup: formData["bloodGroup"],
         hospitalName: formData["hospital-name"],
         location: formData["location"],
         department: formData["department"],
-        insurance: FormData["insurance"],
         admissionDate: formData["admission-date"],
         dischargeDate: formData["discharge-date"],
         reasonForVisit: formData["reason-visit"],
@@ -148,9 +357,10 @@ router.post("/register", (req, res) => {
     name: req.body.name,
     username: req.body.username,
     email: req.body.email,
+    phone: req.body.number,
     address: req.body.address,
+    gender: req.body.gender,
     dob: req.body.dob,
-    phoneNo: req.body.number,
     user_type: req.body.user_type,
   });
   userModel.register(userData, req.body.password).then(() => {
@@ -192,14 +402,14 @@ router.post(
   }
 );
 
-const getUserData = async (userID) => {
+const getUserData = async (username) => {
   try {
-    const user = await userModel.findById(userID);
+    const user = await userModel.findOne({ username: username });
     if (user) {
       const data = await userModel.aggregate([
         {
           $match: {
-            _id: new mongoose.Types.ObjectId(userID),
+            username: username,
           },
         },
         {
@@ -219,5 +429,31 @@ const getUserData = async (userID) => {
     throw new Error(`Error fetching user data: ${error.message}`);
   }
 };
+function sendEmailAlert(email, token) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+      user: "nirvancareonline@gmail.com",
+      pass: "hqvxwdcgpfstjdyg",
+    },
+  });
+
+  const mailOptions = {
+    from: { name: "NirvanCare", address: "nirvancareonline@gmail.com" },
+    to: email,
+    subject: "Your OTP Token",
+    text: `Your OTP token is: ${token}`,
+  };
+
+  transporter.sendMail(mailOptions).then(() => {
+    console.log("Mail Sent");
+  });
+}
+
+setInterval(async () => {
+  await otpModel.deleteMany({ otpExpiration: { $lt: new Date() } });
+}, 60000);
 
 module.exports = router;

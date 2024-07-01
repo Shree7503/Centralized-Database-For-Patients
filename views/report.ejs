@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Record</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Include Font Awesome CSS -->
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        footer {
+            text-align: center;
+            position: absolute; /* Position absolutely */
+            bottom: 0; /* Stick it to the bottom */
+            width: 100%; /* Full width */
+            background-color: #f2f2f2; /* Light background color */
+            padding: 10px 0; /* Padding for content */
+        }
+    </style>
+</head>
+<body>
+    
+    
+   <div>
+    <div style="position: absolute; top: 10px; left: 10px;"> <!-- Position the Rx symbol and doctor's name to the top left corner -->
+            <div><b><%="Dr. "+doctor.name %></b></div> <!-- Doctor's name below the symbol -->
+    </div>
+    <center><img src="/images/logo.jpg" alt="Hospital Symbol" style="width: 120px; height: 65px; margin: 5px auto;"> </center><!-- Center the logo -->
+    <div style="position: absolute; top: 10px; right: 10px;"><b><%= doctor.address %></b></div> <!-- Position the hospital address to the top right corner -->
+</div>
+
+    <hr>
+    <div style="margin-bottom: 10px;"><i class="fas fa-prescription" style="font-size: 24px;"></i></div> <!-- Symbol added here -->
+   
+  
+    <div style="text-align: right;">
+        <p>Date of Consultation: <b><%= new Date(data.date).toLocaleDateString() %></b></p>
+    </div>
+    <div style="text-align: center;">
+        <h2>Patient Information</h2>
+        <p>Name: <%= patient.name %></p>
+        <p>Date of Birth: <%= new Date(patient.dob).toLocaleDateString() %></p>
+        <p>Gender: <%= patient.gender %></p>
+        <p>Blood Group: <%= patient.bloodGroup %></p>
+    </div>
+    
+    <h2>Medication</h2>
+    <table>
+        <tr>
+            <th>Medical Name</th>
+            <th>Dosage</th>
+            <th>Frequency</th>
+            <th>Instruction</th>
+        </tr>
+        <% for (let index = 0; index < data.drug.length; index++) { %>
+            <tr>
+                <td><%= data.drug[index] %></td>
+                <td><%= data.dosage[index] %></td>
+                <td><%= data.frequency[index] %></td>
+                <td><%= data.info[index] %></td>
+            </tr>
+        <% } %>
+    </table>
+    
+    <h2>Precaution</h2>
+    <p><%= data.precautions %></p>
+    <div>
+            <img src="<%=file2%>" alt="" >
+    </div>
+</body>
+</html>

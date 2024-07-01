@@ -136,13 +136,34 @@ h1 {
   font-size: 24px;
 }
 .pdf-icon {
-  position: absolute;
+  /* position: relative;
+   text-decoration: none; 
   bottom: 20px;
-  right: 20px;
+  right: 20px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: #fff;
   font-size: 24px;
 }
+
+.pdf-icon:hover {
+  color: grey;
+}
+
+#editHistory{
+  font-size: 15px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#editHistory:hover {
+  color: grey;
+}
+
 .theme-button {
   background-color: #555;
   color: #fff;
@@ -157,6 +178,3 @@ h1 {
   background-color: #777;
 }
 
-#edit-patient-button {
-  text-decoration: none;
-}

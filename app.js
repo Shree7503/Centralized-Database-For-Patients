@@ -8,6 +8,7 @@ const flash = require("connect-flash");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 
+
 // const User = require("./routes/users");
 
 const indexRouter = require("./routes/index");
@@ -15,6 +16,8 @@ const usersRouter = require("./routes/users");
 const passport = require("passport");
 
 const app = express();
+
+const server = require("http").Server(app);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -72,4 +75,4 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-module.exports = app;
+module.exports = {app: app, server: server};

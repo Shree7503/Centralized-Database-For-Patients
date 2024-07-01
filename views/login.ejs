@@ -38,9 +38,7 @@
     </div>
     <% } %> <% if(messages.length>0) { %>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <strong>
-        Registration successful! You're all set to log in now.
-      </strong>
+      <strong> Registration successful! You're all set to log in now. </strong>
       <button
         type="button"
         class="btn-close"
@@ -90,6 +88,8 @@
           <form action="/register" id="signupForm" method="post">
             <label style="color: grey">Name</label>
             <input name="name" type="text" placeholder="Your name" required />
+            <label style="color: grey">Gender</label>
+            <input name="gender" type="text" placeholder="Gender" required />
             <label style="color: grey">User Name</label>
             <input
               name="username"

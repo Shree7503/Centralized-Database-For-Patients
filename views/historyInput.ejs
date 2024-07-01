@@ -18,10 +18,11 @@
     <link rel="stylesheet" href="/stylesheets/historyInput.css" />
   </head>
   <nav>
-    <a href="intro.html">Home</a>
-    <a href="aboutus.html" target="_blank">About Us</a>
+    <a href="/">Home</a>
+    <a href="/aboutus" target="_blank">About Us</a>
     <a href="#services"> Services</a>
     <a href="#founders">Contact Us</a>
+    <a href="/doctorDashboard">Dashboard</a>
   </nav>
 
   <body>
@@ -29,7 +30,7 @@
       <h1>Patient Details</h1>
       <form action="/patientForm" id="patient-form" method="post" enctype="multipart/form-data">
         <div class="form-group">
-          <label for="username">Username:</label>
+          <label for="username">Patient's Username:</label>
           <input type="text" id="username" name="username" required />
         </div>
         <div class="form-group">
@@ -45,8 +46,12 @@
           <input type="text" id="department" name="department" required />
         </div>
         <div class="form-group">
-          <label for="department">Medical Insurance:</label>
-          <input type="text" id="department" name="insurance" required />
+          <label for="insurance">Medical Insurance:</label>
+          <input type="text" id="insurance" name="insurance" required />
+        </div>
+        <div class="form-group">
+          <label for="Blood-Group">Blood Group:</label>
+          <input type="text" id="Blood-group" name="bloodGroup" required />
         </div>
         <div class="form-group">
           <label for="admission-date">Admission Date:</label>
@@ -83,10 +88,6 @@
           <textarea id="testment" name="treatment" required></textarea>
         </div>
         <div class="form-group">
-          <label for="prescription">Prescription:</label>
-          <textarea id="prescription" name="prescription" required></textarea>
-        </div>
-        <div class="form-group">
           <label>Upload MRI or Scan or X-Ray:</label>
           <label for="file-upload" class="upload-btn">
             <span class="upload-icon">&#128206;</span> Choose File
@@ -94,7 +95,6 @@
           <input type="file" id="file-upload" name="scan" />
         </div>
         <!-- Other form fields... -->
-
         <button type="submit">Submit</button>
       </form>
       <div id="submission-message" class="submission-message"></div>
